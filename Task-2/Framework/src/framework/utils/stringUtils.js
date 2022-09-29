@@ -1,5 +1,4 @@
 module.exports = class StringUtils {
-
   /**
   * Remove all spaces from string
   * @param {string} str current string
@@ -8,7 +7,6 @@ module.exports = class StringUtils {
   static removeAllSpacesFromString(str) {
     return str.replace(/\s/g, '');
   }
-
   /**
   * Convert string to number
   * @param {string} str number like string
@@ -17,7 +15,6 @@ module.exports = class StringUtils {
   static convertStringToNumber(str) {
     return Number.parseInt(str, 10);
   }
-
   /**
   * Replace all symbols from string
   * @param {string} str current string

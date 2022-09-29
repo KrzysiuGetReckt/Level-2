@@ -1,27 +1,25 @@
 module.exports = class GeneratorUtils{
-
     /**
     * Generate a random string with characters of set lenght
     * @param {number} number the lenght of the string
     * @returns {string} result the generated string
     */
     static generateString(number){
-        var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < number; i++ ) {
+        let result           = '';
+        let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for ( let i = 0; i < number; i++ ) {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         return result;
     }
-
     /**
     * Generate a random CapitalLetter
     * @returns {string} string with one capital Letter.
     */
     static generateOneCapitalLetter(){
-        var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        var charactersLength = characters.length;
+        let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let charactersLength = characters.length;
         return characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     /**
@@ -39,8 +37,8 @@ module.exports = class GeneratorUtils{
     * @returns {string} string with one number.
     */
     static generateOneNumberString(){
-        var characters = "0123456789";
-        var charactersLength = characters.length;
+        let characters = "0123456789";
+        let charactersLength = characters.length;
         return characters.charAt(Math.floor(Math.random() * charactersLength));
     }
 };

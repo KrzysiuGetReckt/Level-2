@@ -1,5 +1,7 @@
 const cookieForm = require('./cookieForm');
+const helpForm = require('./helpForm');
 
 module.exports = {
-  cookieForm
+  cookieForm,
+  helpForm
 };

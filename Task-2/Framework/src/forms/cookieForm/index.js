@@ -1,28 +1,26 @@
 const BaseForm = require('../../framework/baseForm');
 const Element = require('../../framework/element');
+const ElementStateProvider = require('../../framework/element/elementStateProvider');
+
 
 class CookieForm extends BaseForm {
 
   constructor() {
-    super('//*[@id="rcc-confirm-button"]', 'Cookie page');
+    super('.cookies', 'Cookie alert');
   }
 
-  get acceptButton() { return new Element('//*[@id="rcc-confirm-button"]', 'Accept cookie button'); }
+  get cookies() {return new Element('.cookies', 'Cookie alert'); }
+  get notReallyNoButton() {return new Element('//button[contains(text(), "Not really, no")]', '"Not really, no" button'); }
 
-  /**
-   * Click accept button
-   * @returns {Promise<any>} result
-   */
-  async clickButtonAccept() {
-    return this.acceptButton.click();
+  async clickNoNotReallyNo(){
+    return this.notReallyNoButton.click();
   }
-  
-  /**
-   * Check than accept button is present
-   * @returns {Promise<any>} result
-   */
-  async isButtonAcceptPresent() {
-    return this.acceptButton.state().assertIsDisplayed();
+
+  async waitTillCookiesAreDisplayed(){
+    return this.cookies.state().waitForDisplayed();
+  }
+  async checkIfCookiesExist(){
+    return this.cookies.state().isExisting();
   }
 }
 

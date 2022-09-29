@@ -13,15 +13,18 @@ class HomePage extends BaseForm {
   get downloadImageButton() { return new Element(
                               '//button[@name="button" and contains(text(), "Download image")]' ,
                               '"Download Image" button'); }                          
-  get intrestErrorLi()      {return new ElementStateProvider(
+  get intrestErrorLi()      {return new Element(
                             '//li[@class="avatar-and-interests__error" and contains(text(), "Please choose 3 interests.")]',
+                            '"Choose intrest Error" li'); }
+  get uploadErrorLi()      {return new Element(
+                            '//li[@class="avatar-and-interests__error" and contains(text(), "Please upload a picture")]',
                             '"Choose intrest Error" li'); }
   
   get unselectAllCheckbox() {return new Element('//label[@for="interest_unselectall"]', '"Unselect all" checkbox'); }
   get nextButton() {return new Element('//button[@name="button" and contains(text(), "Next")]' ,'"Next" button'); }
 
   randomIntrest = (intrest) => {
-    return new Element('//label[@for="interest_'+ intrest + '"]//span', '"'+ intrest +'" checkbox');
+    return new Element(`//label[@for="interest_${intrest}"]//span`, `"${intrest}" checkbox`);
   }
 
   async resetIntrests(){
@@ -34,7 +37,10 @@ class HomePage extends BaseForm {
     return this.nextButton.click();
   }
   async checkIfIntrestErrorIsDisplayed(){
-    return this.intrestErrorLi.isExisting();
+    return this.intrestErrorLi.state().isExisting();
+  }
+  async checkIfUploadErrorIsDisplayed(){
+    return this.uploadErrorLi.state().isExisting();
   }
 }
 

@@ -30,7 +30,7 @@ exports.config = {
         await browser.setWindowSize(1920, 1080);
       }),
     specs: [
-        './src/test/steps/*.js'
+        './src/test/specs/*.js'
     ],
     // Patterns to exclude.
     exclude: [

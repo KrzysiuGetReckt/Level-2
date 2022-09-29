@@ -9,10 +9,10 @@ exports.config = {
         browserName: 'chrome',
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
-          args: ['--incognito', '--no-sandbox', '--disable-dev-shm-usage']//, '--headless']
+          args: ['--incognito', '--no-sandbox', '--disable-dev-shm-usage']
         }
       },
     ],
-    services: ['chromedriver'], // chromedriver
+    services: ['chromedriver'], 
   }
 };
