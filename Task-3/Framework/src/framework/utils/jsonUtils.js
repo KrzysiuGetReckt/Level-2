@@ -21,4 +21,13 @@ module.exports = class JsonUtils{
     
         return false;
     }
+    /**
+    * Checks if the FULL json object is the same with the supposed data.
+    * @param {object} jsonItem the json object that should be checked.
+    * @param {object} jsonItemCompareTo the json that we are comparing against
+    * @returns True or False 
+    */
+   static jsonCompare(jsonItem, jsonItemCompareTo){
+    return JSON.stringify(jsonItem) === JSON.stringify(jsonItemCompareTo);
+   }
 }
