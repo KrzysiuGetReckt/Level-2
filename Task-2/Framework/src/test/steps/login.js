@@ -1,4 +1,4 @@
-const { loginPage } = require("../../../pages");
+const { loginPage } = require("../../pages");
 
 class LoginSteps {
     async login(password, email, mailServer, domain){

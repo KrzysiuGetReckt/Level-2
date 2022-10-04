@@ -1,7 +1,7 @@
 module.exports = class GeneratorUtils{
     /**
     * Generate a random string with characters of set lenght
-    * @param {number} number the lenght of the string
+    * @param {int} number the length of the string
     * @returns {string} result the generated string
     */
     static generateString(number){
@@ -14,13 +14,18 @@ module.exports = class GeneratorUtils{
         return result;
     }
     /**
-    * Generate a random CapitalLetter
-    * @returns {string} string with one capital Letter.
+    * Generate a random string of Capital Letters
+    * @param {int} number the length of the string
+    * @returns {string} result the generated string of capital letters.
     */
-    static generateOneCapitalLetter(){
-        let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static generateCapitalLetters(number){
+        let result = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         let charactersLength = characters.length;
-        return characters.charAt(Math.floor(Math.random() * charactersLength));
+        for(let i=0; i < number; i++){
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
     }
     /**
     * Generate a random number to pick from an array
@@ -33,12 +38,17 @@ module.exports = class GeneratorUtils{
         return array[randomPick];
     }
     /**
-    * Generate one random number
+    * Generate random numbers as a string
+    * @param {int} number the length of the string
     * @returns {string} string with one number.
     */
-    static generateOneNumberString(){
-        let characters = "0123456789";
+    static generateNumbersString(number){
+        let result ="";
+        let characters = '0123456789';
         let charactersLength = characters.length;
-        return characters.charAt(Math.floor(Math.random() * charactersLength));
+        for(let i=0; i < number; i++){
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;   
     }
 };

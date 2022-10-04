@@ -15,9 +15,8 @@ class LoginPage extends BaseForm {
   get domainInput() {return new Element(this.inputContainsPlaceholder('Domain'), '"Domain" input'); }
   get addressDropdown() {return new Element('.dropdown__field', '"Adress droptdown" inputList'); }
   addressList = (domain) => {
-    return new Element('//div[contains(text(),"'
-    + domain +
-    '") and @class="dropdown__list-item"]', '"Domain adress" inputOption', 'inputOption');
+    return new Element(`//div[contains(text(),"${domain}") and @class="dropdown__list-item"]`,
+                      `"Domain adress" inputOption, inputOption`);
   };                                    
   get termsAndConditionsChekbox() {return new Element('.checkbox__box', '"Terms & Conditions" checkbox'); }
   get nextLink() {return new Element('//a[contains(text(),"Next")]', '"Next" link'); } 

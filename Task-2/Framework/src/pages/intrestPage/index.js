@@ -18,7 +18,7 @@ class HomePage extends BaseForm {
                             '"Choose intrest Error" li'); }
   get uploadErrorLi()      {return new Element(
                             '//li[@class="avatar-and-interests__error" and contains(text(), "Please upload a picture")]',
-                            '"Choose intrest Error" li'); }
+                            '"Upload Error" li'); }
   
   get unselectAllCheckbox() {return new Element('//label[@for="interest_unselectall"]', '"Unselect all" checkbox'); }
   get nextButton() {return new Element('//button[@name="button" and contains(text(), "Next")]' ,'"Next" button'); }
