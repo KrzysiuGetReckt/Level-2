@@ -1,12 +1,12 @@
 const { loginPage } = require("../../pages");
 
 class LoginSteps {
-    async login(password, email, mailServer, domain){
-        await loginPage.typePassword(password);
-        await loginPage.typeEmail(email);
-        await loginPage.typeDomain(mailServer);
+    async login(loginObject){
+        await loginPage.typePassword(loginObject.password);
+        await loginPage.typeEmail(loginObject.email);
+        await loginPage.typeDomain(loginObject.mailServer);
         await loginPage.clickAddressDropdown();
-        await loginPage.chooseAddress(domain);
+        await loginPage.chooseAddress(loginObject.domain);
         await loginPage.clickTermsAndConditions();
     }
 }
