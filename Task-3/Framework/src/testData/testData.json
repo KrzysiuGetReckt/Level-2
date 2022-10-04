@@ -1,4 +1,8 @@
 {
+    "generator data":{
+        "body length": 10,
+        "title length": 10
+    },
     "posts": {
         "User id 99":{
             "userId" : 10,
