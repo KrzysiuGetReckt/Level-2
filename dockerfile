@@ -1,7 +1,5 @@
 FROM tomcat:9.0-alpine
-LABEL maintainer="deepak@softwareyoga.com"
+RUN apk update && apk add --no-cache git
+WORKDIR /usr/local/tomcat/webapps
 
-ADD docker_task /usr/local/tomcat/webapps/ROOT
-
-EXPOSE 8080
-CMD ["catalina.sh", "run"]
+RUN git clone https://github.com/a1qatraineeship/docker_task app/
