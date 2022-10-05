@@ -26,7 +26,7 @@ module.exports = class ObjectUtils{
     * @param {string} valueToPickFrom the value that should be picked
     * @returns {boolean} true or false.
     */
-   static isAscending(object, valueToPickFrom){
+   static isObjectSortedByAscending(object, valueToPickFrom){
         for(let i = 1; i < object.length; i++){
             return object[i][valueToPickFrom] === 0 || object[i][valueToPickFrom] >= object[i - 1][valueToPickFrom];
         }
