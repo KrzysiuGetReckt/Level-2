@@ -1,19 +1,7 @@
-module.exports = class Logger {
-  /**
-   * Logs a message
-   * @param {string} message The message to write in console
-   */
-  static info(message) {
-    const msg = `[INFO] ${new Date().toLocaleTimeString()} : ${message}`;
-    console.log(msg);
-  }
+const loggerSetup = require('./loggerSetup');
 
-  /**
-   * Logs a error
-   * @param {string} message The message to write in console
-   */
-  static error(message) {
-    const msg = `[ERROR] ${new Date().toLocaleTimeString()} : ${message}`;
-    console.log(msg);
-  }
-};
+var Logger = null;
+
+Logger = loggerSetup();
+
+module.exports = Logger;
