@@ -9,7 +9,7 @@ module.exports = {
         id: 150
     },
     post1:{
-        id: 1
+        userId: 1
     },
     user5: {
         id: 5,

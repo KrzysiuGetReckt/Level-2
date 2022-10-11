@@ -1,7 +1,7 @@
 const unirest = require('unirest');
 const Logger = require('../logger');
 
-module.exports = class apiUtil{
+module.exports = class ApiUtil{
     static get(url){
         Logger.info(`Sending Get request at: ${url}`);
         return unirest.get(url);
