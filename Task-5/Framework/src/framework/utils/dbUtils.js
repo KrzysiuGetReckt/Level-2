@@ -1,8 +1,7 @@
 const mysql = require('mysql2/promise');
 const credensials = require('../../environment/credensialsEnviroment');
-const Logger = require('../logger');
 
-module.exports = new class dbUtils{
+module.exports = new class DbUtils{
 
     static #instance = null;
     

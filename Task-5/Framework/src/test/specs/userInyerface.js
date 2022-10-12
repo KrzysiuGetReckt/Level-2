@@ -2,32 +2,25 @@ const { expect } = require('chai');
 
 const { ENVIRONMENT } = require('../../environment/envConfig');
 const env = require(`../../environment/${ENVIRONMENT}Environment`);
-const { intrestPage } = require('../../pages');
+const { intrestPage, homePage, loginPage } = require('../../pages');
 const userInformation = require('../../testData/userInformation');
-const GeneratorUtils = require('../../framework/utils/generatorUtils');
-const ArrayUtils = require('../../framework/utils/arrayUtils');
-const homePage = require('../../pages/homePage');
-const loginPage = require('../../pages/loginPage');
+const { GeneratorUtils, DbUtils, DateUtils, ArrayUtils} = require('../../framework/utils');
 const login = require('../steps/login');
-const helpForm = require('../../forms/helpForm');
-const cookieForm = require('../../forms/cookieForm');
-const dbUtils= require('../../framework/utils/dbUtils');
-const Logger = require('../../framework/logger');
-const projectDbUtil = require('../../projectUtils/projectDbUtil');
-const fileUtils = require('../../framework/utils/fileUtils');
-const dateUtils = require('../../framework/utils/dateUtils');
+const HelpForm = require('../../forms/helpForm');
+const CookieForm = require('../../forms/cookieForm');
+const ProjectDbUtil = require('../../projectUtils/projectDbUtil');
 
-const testStartTime = dateUtils.currentDate();
+const testStartTime = DateUtils.currentDate();
 let testCaseStartTime = null;
 
 describe('User Inyerface', async () => {
   before(async function(){
-    await dbUtils.createConnection();
-    await projectDbUtil.insertProject();
-    await projectDbUtil.insertSessionId(testStartTime);
+    await DbUtils.createConnection();
+    await ProjectDbUtil.insertProject(env.projectName);
+    await ProjectDbUtil.insertSessionId(testStartTime, env.sessionId);
   });
   beforeEach(async function(){
-    testCaseStartTime = dateUtils.currentDate();
+    testCaseStartTime = DateUtils.currentDate();
     await browser.url(env.startUrl);
   });
 
@@ -60,16 +53,16 @@ describe('User Inyerface', async () => {
     await homePage.waitForFormIsOpened();
     await homePage.clickHere();
     await loginPage.waitForFormIsOpened();
-    await helpForm.clickSendToBottom();
-    expect(await helpForm.checkIfHelpFormIsHidden()).to.be.true;
+    await HelpForm.clickSendToBottom();
+    expect(await HelpForm.checkIfHelpFormIsHidden()).to.be.true;
   });
   it('Test Case 3 - check if Cookie form is closed', async () => {
     await homePage.waitForFormIsOpened();
     await homePage.clickHere();
     await loginPage.waitForFormIsOpened();
-    await cookieForm.waitTillCookiesAreDisplayed();
-    await cookieForm.clickNoNotReallyNo();
-    expect(await cookieForm.checkIfCookiesExist()).to.be.false;
+    await CookieForm.waitTillCookiesAreDisplayed();
+    await CookieForm.clickNoNotReallyNo();
+    expect(await CookieForm.checkIfCookiesExist()).to.be.false;
   });
   it('Test Case 4 - Validate that the timer starts at 00:00', async () => {
     await homePage.waitForFormIsOpened();
@@ -79,13 +72,13 @@ describe('User Inyerface', async () => {
   });
 
   afterEach(async function(){
-    await projectDbUtil.insertTest(await this.currentTest.title, await this.currentTest.state, testStartTime,
-                                  await dateUtils.currentDate());
-    await projectDbUtil.insertLog(await this.currentTest.title);
+    await ProjectDbUtil.insertTest(env.sessionId, await this.currentTest.title, await this.currentTest.state, env.projectName, testStartTime,
+                                  await DateUtils.currentDate());
+    await ProjectDbUtil.insertLog(await this.currentTest.title);
     
   });
 
   after(async function () {
-    await dbUtils.endConnection();
+    await DbUtils.endConnection();
   });
 })

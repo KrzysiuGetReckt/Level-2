@@ -51,4 +51,9 @@ module.exports = class GeneratorUtils{
         }
         return result;   
     }
+    static generateNumber(min, max){
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 };
