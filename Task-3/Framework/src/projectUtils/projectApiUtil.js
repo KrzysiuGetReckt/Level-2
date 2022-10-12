@@ -1,34 +1,35 @@
-const unirest = require('unirest');
-
 const { ENVIRONMENT } = require('../environment/envConfig');
 const Logger = require('../framework/logger');
 const env = require(`../environment/${ENVIRONMENT}Environment`);
 const apiUtil = require('../framework/utils/apiUtils');
 
 module.exports = class ProjectApiUtil{
-    static getPosts(){
-        Logger.info(`Sending Get request at: ${env.apiUrl}/post`);
-        return apiUtil.get(`${env.apiUrl}/posts`);
+    static async getPosts(){
+        Logger.info(`Get /Post info`);
+        let request = `${env.apiUrl}/posts`;
+        return apiUtil.get(request);
     }
-    static getExactPost(id){
-        Logger.info(`Sending Get request at: ${env.apiUrl}/post${id}`);
-        return apiUtil.get(`${env.apiUrl}/posts/${id}`);
+    static async getExactPost(id){
+        Logger.info(`Get exact /Post with id:  ${id}`);
+        let request = `${env.apiUrl}/posts/${id}`;
+        return apiUtil.get(request);
     }
-    static getUsers(){
-        Logger.info(`Sending Get request at: ${env.apiUrl}/users`);
-        return apiUtil.get(`${env.apiUrl}/users`);
+    static async getUsers(){
+        Logger.info(`Get /Users info`);
+        let request = `${env.apiUrl}/users`;
+        return apiUtil.get(request);
     }
-    static getUsersId(id){
-        Logger.info(`Sending Get request at: ${env.apiUrl}/users/${id}`);
-        return apiUtil.get(`${env.apiUrl}/users/${id}`);
+    static async getUsersId(id){
+        Logger.info(`Get /Users with id: ${id}`);
+        let request = `${env.apiUrl}/users/${id}`;
+        return apiUtil.get(request);
     }
 
-    static postPostTypeSendUserIdBodyTitle(post){
-        Logger.info(`Sending Post request at: ${env.apiUrl}/post, userId: ${post.userId}, body: ${post.body}, title: ${post.title}`);
-        return apiUtil.post(`${env.apiUrl}/posts`).send({
-            userId: post.userId,
-            body: post.body,
-            title: post.title
-        });
-    }
+    static async postPost(post){
+        Logger.info(`Sending Post request to /Posts with userId: ${post.userId}, body: ${post.body}, title: ${post.title}`);
+        let request = `${env.apiUrl}/posts`;
+        let header = {'Accept': 'application/json'};
+        return apiUtil.post(request, header , { userId: post.userId, body: post.body, title: post.title},)
+    };
+    
 };

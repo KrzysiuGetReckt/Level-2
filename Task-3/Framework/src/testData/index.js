@@ -1,9 +1,9 @@
-const testData = require('./testData')
-const generationData = require('./generationData')
-const apiStatusCodes = require('./apiStatusCodes')
+const TestData = require('./testData')
+const GenerationData = require('./generationData')
+const ApiStatusCodes = require('./apiStatusCodes')
 
 module.exports = {
-    apiStatusCodes,
-    generationData,
-    testData
+    ApiStatusCodes,
+    GenerationData,
+    TestData
 }

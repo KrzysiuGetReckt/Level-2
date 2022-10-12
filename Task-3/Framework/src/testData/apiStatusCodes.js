@@ -1,7 +1,5 @@
 module.exports = {
-    statusCodes: {
-        "200" : 200,
-        "201" : 201,
-        "404" : 404
-    }
+    ok : 200,
+    created : 201,
+    notFound : 404
 }
