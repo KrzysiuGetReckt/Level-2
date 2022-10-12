@@ -1,9 +1,9 @@
-const homePage = require('./homePage');
-const loginPage = require('./loginPage');
-const intrestPage = require('./intrestPage');
+const HomePage = require('./homePage');
+const LoginPage = require('./loginPage');
+const IntrestPage = require('./intrestPage');
 
 module.exports = {
-  homePage,
-  loginPage,
-  intrestPage
+  HomePage,
+  LoginPage,
+  IntrestPage
 };

@@ -1,101 +1,111 @@
 const { ENVIRONMENT } = require(`../environment/envConfig`);
 const env = require(`../environment/testEnvironment`);
-const Logger = require("../framework/logger");
 const { FileUtils, DbUtils } = require("../framework/utils");
-const dbUtils = require("../framework/utils/dbUtils");
 
-module.exports = new class projectDbUtil {
-    async selectAllProjects(){
-        return DbUtils.query(`SELECT * FROM project`);
+module.exports = class projectDbUtil {
+    static async selectAllProjects(){
+        let query = `SELECT * FROM project`;
+        return DbUtils.query(query);
     }
-    async getProjectId(projectName){
-        return DbUtils.query(`SELECT id FROM project WHERE name LIKE '${projectName}'`);
+    static async getProjectId(projectName){
+        let query = `SELECT id FROM project WHERE name LIKE '${projectName}'`
+        return DbUtils.query(query);
     }
-    async getSessionId(id){
-        return DbUtils.query(`SELECT id FROM session WHERE session_key LIKE '${id}'`);
+    static async getSessionId(id){
+        let query = `SELECT id FROM session WHERE session_key LIKE '${id}'`
+        return DbUtils.query(query);
     }
-    async getTestId(testName){
-        return DbUtils.query(`SELECT id FROM test WHERE name LIKE '${testName}'`);
+    static async getTestId(testName){
+        let query = `SELECT id FROM test WHERE name LIKE '${testName}'`
+        return DbUtils.query(query);
     }
-    async getTestIdById(testId){
-        return DbUtils.query(`SELECT id FROM test WHERE id LIKE ${testId}`);
+    static async getTestIdById(testId){
+        let query = `SELECT id FROM test WHERE id LIKE ${testId}`
+        return DbUtils.query(query);
     }
-    async getTestProjectIdAuthorIdById(testId){
-        return DbUtils.query(`SELECT project_id, author_id FROM test WHERE id LIKE ${testId}`);
+    static async getTestProject(testId){
+        let query = `SELECT project_id, author_id FROM test WHERE id LIKE ${testId}`
+        return DbUtils.query(query);
     }
-    async getStateId(state){
-        return DbUtils.query(`SELECT id FROM status WHERE name LIKE '${state}'`);
+    static async getStateId(state){
+        let query = `SELECT id FROM status WHERE name LIKE '${state}'`
+        return DbUtils.query(query);
     }
-    async getAuthorIdByName(name){
-        return DbUtils.query(`SELECT id FROM author WHERE name LIKE '${name}'`);
+    static async getAuthorIdByName(name){
+        let query = `SELECT id FROM author WHERE name LIKE '${name}'`
+        return DbUtils.query(query);
     }
 
-    async insertProject(projectName){
+    static async insertProject(projectName){
         let result = await this.getProjectId(projectName);
         if(result.length === 0){
-            return DbUtils.query(`INSERT INTO project
+            let query = `INSERT INTO project
             (id, name)
             VALUES
-            (Null, '${projectName}')`);
+            (Null, '${projectName}')`
+            return DbUtils.query(query);
         }
     }
 
-    async insertSessionId(testStartTime, id){
+    static async insertSessionId(testStartTime, id){
         let result = await this.getSessionId(id);
         if(result.length === 0){
-            return DbUtils.query(`INSERT INTO session
+            let query = `INSERT INTO session
             (id, session_key, created_time, build_number)
             VALUES
-            (NULL, ${id}, '${testStartTime}', ${env.buildNumber})`);
+            (NULL, ${id}, '${testStartTime}', ${env.buildNumber})`
+            return DbUtils.query(query);
         }
     }
 
-    async insertTest(sessionId, testName, status, projectName, testStartTime, testEndTime){
+    static async insertTest(sessionId, testName, status, projectName, testStartTime, testEndTime){
         const session_Id = await this.getSessionId(sessionId);
         const stateId = await this.getStateId(status.toUpperCase());
         const projectId = await this.getProjectId(projectName);
-        Logger.info(stateId[0].id + " this is the id.")
-        return DbUtils.query(`
+        let query = `
             INSERT INTO test 
             (id, name, status_id, method_name, project_id, session_id, start_time, end_time, env, browser, author_id)
             VALUES 
-            (NULL, '${testName}', ${stateId[0].id}, '${env.testMethodName}', ${projectId[0].id}, ${session_Id[0].id}, '${testStartTime}', '${testEndTime}', '${env.envName}', '${env.browser}', NULL)`
-        );   
+            (NULL, '${testName}', ${stateId[0].id}, '${env.testMethodName}', ${projectId[0].id}, ${session_Id[0].id}, '${testStartTime}', '${testEndTime}', '${env.envName}', '${env.browser}', NULL)`;
+        return DbUtils.query(query);   
     }
 
-    async insertLog(testName){
+    static async insertLog(testName){
         const testId = await this.getTestId(testName);
         const logs = FileUtils.readFile(process.cwd() + '/logs/logs.txt');
-        return DbUtils.query(`INSERT INTO log
+        let query = `INSERT INTO log
             (id, content, is_exception, test_id)
             VALUES
             (Null, '${logs}', 0, ${testId[0]['id']})`
-        );
+        return DbUtils.query(query);
     }
 
-    async insertAuthor(authorCredensials){
+    static async insertAuthor(authorCredensials){
         let result = await this.getAuthorIdByName(authorCredensials.authorName);
         if(result.length === 0){
-            return DbUtils.query(`INSERT INTO author
+            let query = `INSERT INTO author
             (id, name, login, email)
             VALUES
-            (Null, '${authorCredensials.authorName}', '${authorCredensials.authorLogin}', '${authorCredensials.authorEmail}')`
-        )};
+            (Null, '${authorCredensials.authorName}', '${authorCredensials.authorLogin}', '${authorCredensials.authorEmail}')`;
+            return DbUtils.query(query)
+        };
     }
 
-    async updateTestProjectIdAuthorIdWithId(data){
+    static async updateTest(data){
         let result = await this.getTestIdById(data.testId);
         if(result.length === 1){
-            return dbUtils.query(`UPDATE test
+            let query = `UPDATE test
             SET
             project_id = ${data.projectId[0].id}, author_id = ${data.authorId[0].id}
-            WHERE test.id = ${data.testId}`
-        )};
+            WHERE test.id = ${data.testId}`;
+            return DbUtils.query(query)
+        };
     }
 
-    async deleteTestById(id){
-        return dbUtils.query(`DELETE FROM test 
+    static async deleteTestById(id){
+        let query = `DELETE FROM test 
         WHERE 
-        test.id = ${id}`);
+        test.id = ${id}`;
+        return DbUtils.query(query);
     }
 }

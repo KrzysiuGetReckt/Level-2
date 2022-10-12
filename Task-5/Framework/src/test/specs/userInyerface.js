@@ -2,16 +2,15 @@ const { expect } = require('chai');
 
 const { ENVIRONMENT } = require('../../environment/envConfig');
 const env = require(`../../environment/${ENVIRONMENT}Environment`);
-const { intrestPage, homePage, loginPage } = require('../../pages');
+const { IntrestPage, HomePage, LoginPage } = require('../../pages');
 const userInformation = require('../../testData/userInformation');
 const { GeneratorUtils, DbUtils, DateUtils, ArrayUtils} = require('../../framework/utils');
-const login = require('../steps/login');
+const Login = require('../steps/login');
 const HelpForm = require('../../forms/helpForm');
 const CookieForm = require('../../forms/cookieForm');
 const ProjectDbUtil = require('../../projectUtils/projectDbUtil');
 
 const testStartTime = DateUtils.currentDate();
-let testCaseStartTime = null;
 
 describe('User Inyerface', async () => {
   before(async function(){
@@ -33,42 +32,42 @@ describe('User Inyerface', async () => {
       mailServer : GeneratorUtils.generateString(userInformation.generationSettings.Lenght),
       domain : GeneratorUtils.pickOneFromArray(userInformation.generationSettings.domains)
     }
-    await homePage.waitForFormIsOpened();
-    await homePage.clickHere();
-    await loginPage.waitForFormIsOpened(); //the 1 / 4 card is open.
-    await login.loginNext(loginCredentials);
-    await loginPage.clickNext();
-    await intrestPage.waitForFormIsOpened(); // the 2 / 4 card is open.
-    await intrestPage.resetIntrests();
+    await HomePage.waitForFormIsOpened();
+    await HomePage.clickHere();
+    await LoginPage.waitForFormIsOpened(); //the 1 / 4 card is open.
+    await Login.loginNext(loginCredentials);
+    await LoginPage.clickNext();
+    await IntrestPage.waitForFormIsOpened(); // the 2 / 4 card is open.
+    await IntrestPage.resetIntrests();
 
     let pickOutIntrests = await ArrayUtils.selectNumberOfItems(userInformation.generationSettings.intrests, 3);
     for (const pickOutIntrest of pickOutIntrests){
-      await intrestPage.clickIntrest(pickOutIntrest);
+      await IntrestPage.clickIntrest(pickOutIntrest);
     }
-    await intrestPage.clickNext();
-    expect(await intrestPage.checkIfUploadErrorIsDisplayed()).to.be.true;
-    expect(await intrestPage.checkIfIntrestErrorIsDisplayed()).to.be.false;
+    await IntrestPage.clickNext();
+    expect(await IntrestPage.checkIfUploadErrorIsDisplayed()).to.be.true;
+    expect(await IntrestPage.checkIfIntrestErrorIsDisplayed()).to.be.false;
   });
   it('Test Case 2 - check if Help Form is hidden', async () => {
-    await homePage.waitForFormIsOpened();
-    await homePage.clickHere();
-    await loginPage.waitForFormIsOpened();
+    await HomePage.waitForFormIsOpened();
+    await HomePage.clickHere();
+    await LoginPage.waitForFormIsOpened();
     await HelpForm.clickSendToBottom();
     expect(await HelpForm.checkIfHelpFormIsHidden()).to.be.true;
   });
   it('Test Case 3 - check if Cookie form is closed', async () => {
-    await homePage.waitForFormIsOpened();
-    await homePage.clickHere();
-    await loginPage.waitForFormIsOpened();
+    await HomePage.waitForFormIsOpened();
+    await HomePage.clickHere();
+    await LoginPage.waitForFormIsOpened();
     await CookieForm.waitTillCookiesAreDisplayed();
     await CookieForm.clickNoNotReallyNo();
     expect(await CookieForm.checkIfCookiesExist()).to.be.false;
   });
   it('Test Case 4 - Validate that the timer starts at 00:00', async () => {
-    await homePage.waitForFormIsOpened();
-    await homePage.clickHere();
-    await loginPage.waitForFormIsOpened();
-    expect(await loginPage.getTimerTime()).to.be.equal(userInformation.expected.timer);
+    await HomePage.waitForFormIsOpened();
+    await HomePage.clickHere();
+    await LoginPage.waitForFormIsOpened();
+    expect(await LoginPage.getTimerTime()).to.be.equal(userInformation.expected.timer);
   });
 
   afterEach(async function(){

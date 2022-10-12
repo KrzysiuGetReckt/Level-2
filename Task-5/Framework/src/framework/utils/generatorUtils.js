@@ -51,6 +51,13 @@ module.exports = class GeneratorUtils{
         }
         return result;   
     }
+
+    /**
+    * Generating a number between the minimal value and the maximum.
+    * @param {int} min the minimal value
+    * @param {int} max the maximal value
+    * @returns {int} the random number in the range <min, max>
+    */
     static generateNumber(min, max){
         min = Math.ceil(min);
         max = Math.floor(max);
