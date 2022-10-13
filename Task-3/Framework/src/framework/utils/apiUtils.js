@@ -20,7 +20,7 @@ module.exports = class ApiUtil{
     * @return Returns a request body with the gathered information. 
     */
     static async post(url, header, data){
-        Logger.info(`Sending Post request at: ${url}`);
+        Logger.info(`Sending Post request at: ${url} with header: ${header} and data: ${JSON.stringify(data)}`);
         return unirest.post(url).headers(header).send(data);
     }
 };
