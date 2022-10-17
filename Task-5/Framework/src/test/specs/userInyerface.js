@@ -1,16 +1,14 @@
 const { expect } = require('chai');
 
 const { ENVIRONMENT } = require('../../environment/envConfig');
-const env = require(`../../environment/testEnvironment`); // to do change back to: ${ENVIRONMENT}Environment
+const env = require(`../../environment/${ENVIRONMENT}Environment`); 
 const credensialsEnviroment = require('../../environment/credensialsEnviroment');
 const { IntrestPage, HomePage, LoginPage } = require('../../pages');
 const { GeneratorUtils, DatabaseUtils, DateUtils, ArrayUtils} = require('../../framework/utils');
-const Login = require('../steps/login');
+const { Login } = require('../steps');
 const HelpForm = require('../../forms/helpForm');
 const CookieForm = require('../../forms/cookieForm');
 const { ProjectDbUtil } = require('../../projectUtils');
-const Logger = require('../../framework/logger');
-const projectDbUtil = require('../../projectUtils/projectDbUtil');
 
 const testStartTime = DateUtils.currentDate();
 const db = new DatabaseUtils;
@@ -19,17 +17,21 @@ describe('User Inyerface', async () => {
   before(async function(){
     await db.createConnection(credensialsEnviroment);
     await db.query(await ProjectDbUtil.insertSessionId(await DateUtils.currentDate(), await browser.sessionId));
+    let result = await db.query(await ProjectDbUtil.getProjectId(await env.projectName));
+    if(result.length === 0){
+      await db.query(await ProjectDbUtil.insertProject(env.projectName));
+    }
   });
   beforeEach(async function(){
     await browser.url(env.startUrl);
   });
   it('Test case 1 - Check if properly picked 3 random intrest', async () => {
     const loginCredentials = {
-      email : GeneratorUtils.generateString(env.generationSettings.Lenght),
+      email : GeneratorUtils.generateString(env.generationSettings.lenght),
       password :  GeneratorUtils.generateCapitalLetters(1) + 
                   GeneratorUtils.generateNumbersString(1) +
-                  GeneratorUtils.generateNumbersString(env.generationSettings.Lenght),
-      mailServer : GeneratorUtils.generateString(env.generationSettings.Lenght),
+                  GeneratorUtils.generateNumbersString(env.generationSettings.lenght),
+      mailServer : GeneratorUtils.generateString(env.generationSettings.lenght),
       domain : GeneratorUtils.pickOneFromArray(env.generationSettings.domains)
     }
     await HomePage.waitForFormIsOpened();
@@ -72,9 +74,9 @@ describe('User Inyerface', async () => {
 
   afterEach(async function(){
     let state = await this.currentTest.state;
-    let statusId = await db.query(await projectDbUtil.getStateId(await state.toUpperCase()));
+    let statusId = await db.query(await ProjectDbUtil.getStateId(await state.toUpperCase()));
     let projectId = await db.query(await ProjectDbUtil.getProjectId(await env.projectName));
-    let sessionId = await db.query(await projectDbUtil.getSessionId(await browser.sessionId));
+    let sessionId = await db.query(await ProjectDbUtil.getSessionId(await browser.sessionId));
 
     const testData = {
       name: await this.currentTest.title,
@@ -88,7 +90,7 @@ describe('User Inyerface', async () => {
       browser: await browser.requestedCapabilities.browserName,
     }
     await db.query(await ProjectDbUtil.insertTest(testData));
-    let testId = await db.query(await projectDbUtil.getTestIdByName(testData.name));
+    let testId = await db.query(await ProjectDbUtil.getTestIdByName(testData.name));
     await db.query(await ProjectDbUtil.insertLog(testId[0].id));
   });
 

@@ -3,7 +3,7 @@ const Logger = require("../framework/logger");
 const env = require(`../environment/${ENVIRONMENT}Environment`);
 const { FileUtils } = require("../framework/utils");
 
-module.exports = class projectDbUtil {
+module.exports = class ProjectDbUtil {
     static async selectAllProjects(){
         return `SELECT * FROM project`;
     }
@@ -74,7 +74,7 @@ module.exports = class projectDbUtil {
     static async updateTest(data){
         return `UPDATE test
             SET
-            project_id = ${data.projectId[0].id}, author_id = ${data.authorId[0].id}
+            project_id = ${data.projectId}, author_id = ${data.authorId}
             WHERE test.id = ${data.testId}`;
     }
 
