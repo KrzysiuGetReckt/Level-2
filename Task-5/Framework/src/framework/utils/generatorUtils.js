@@ -14,6 +14,20 @@ module.exports = class GeneratorUtils{
         return result;
     }
     /**
+    * Generate a random string with small letters of set lenght
+    * @param {int} number the length of the string
+    * @returns {string} result the generated string
+    */
+    static generateStringSmallLetters(number){
+        let result           = '';
+        let characters       = 'abcdefghijklmnopqrstuvwxyz';
+        let charactersLength = characters.length;
+        for ( let i = 0; i < number; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+    }
+    /**
     * Generate a random string of Capital Letters
     * @param {int} number the length of the string
     * @returns {string} result the generated string of capital letters.

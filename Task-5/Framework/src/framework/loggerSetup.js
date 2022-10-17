@@ -1,4 +1,5 @@
 const { createLogger, format, transports } = require('winston');
+const { FILESAVEFIR } = require('../environment/envConfig');
 const { combine, timestamp, printf } = format;
 
 const myFormat = printf(({timestamp, level, message}) => {
@@ -13,7 +14,7 @@ const loggerSetup = () => {
             myFormat
           ),
         transports: [
-            new transports.File({ filename: 'logs/logs.txt', format: myFormat , options: { flags: 'w' }}),
+            new transports.File({ filename: FILESAVEFIR, format: myFormat , options: { flags: 'w' }}),
             new transports.Console({ level: 'info'})
         ],
     });

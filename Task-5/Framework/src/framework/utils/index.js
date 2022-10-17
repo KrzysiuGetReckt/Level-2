@@ -3,12 +3,12 @@ const GeneratorUtils = require('./generatorUtils');
 const ArrayUtils = require('./arrayUtils');
 const DateUtils = require('./dateUtils');
 const FileUtils = require('./fileUtils');
-const DbUtils = require('./dbUtils');
+const DatabaseUtils = require('./databaseUtils');
 
 module.exports = {
   ArrayUtils,
   DateUtils,
-  DbUtils,
+  DatabaseUtils,
   FileUtils,
   GeneratorUtils,
   StringUtils

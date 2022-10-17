@@ -1,6 +1,6 @@
 const loggerSetup = require('./loggerSetup');
 
-var Logger = null;
+let Logger = null;
 
 Logger = loggerSetup();
 

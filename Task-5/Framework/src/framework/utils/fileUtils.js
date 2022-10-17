@@ -1,10 +1,9 @@
 const fs = require('fs');
-const path = require('path');
 const process = require('process');
 
 const Logger = require('../logger');
 
-module.exports = class fileUtil{
+module.exports = class FileUtil{
     /**
     * Reads and returns the contents of a file
     * @param {string} path the relative path to the file

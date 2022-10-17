@@ -1,5 +1,7 @@
 // const {expect} = require('chai');
 
+// const { ENVIRONMENT } = require('../../environment/envConfig');
+// const env = require(`../../environment/testEnvironment`);
 // const DbUtils = require('../../framework/utils/dbUtils');
 // const { ProjectDbUtil } = require('../../projectUtils');
 // const DbTestData = require('../../testData/dbTestData');
@@ -7,7 +9,7 @@
 // describe('User Inyerface', async () => {
 //     before(async function(){
 //         await DbUtils.createConnection();
-//         await ProjectDbUtil.insertAuthor(DbTestData);
+//         await ProjectDbUtil.insertAuthor(env);
 //         await ProjectDbUtil.insertProject(DbTestData.projectName)
 //     });
 //     beforeEach(async function(){
