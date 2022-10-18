@@ -73,7 +73,6 @@ module.exports = class DatabaseUtils{
            await this.createConnection();
         }
         const [rows, fields] = await this._connection.execute(queryString);
-        Logger.info('The querry id done.')
         return rows;
     }
 }

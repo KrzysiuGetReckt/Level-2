@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 
 const { ENVIRONMENT } = require('../../environment/envConfig');
-const env = require(`../../environment/${ENVIRONMENT}Environment`); 
+const env = require(`../../environment/testEnvironment`); 
 const credensialsEnviroment = require('../../environment/credensialsEnviroment');
 const { IntrestPage, HomePage, LoginPage } = require('../../pages');
 const { GeneratorUtils, DatabaseUtils, DateUtils, ArrayUtils} = require('../../framework/utils');
@@ -17,9 +17,9 @@ describe('User Inyerface', async () => {
   before(async function(){
     await db.createConnection(credensialsEnviroment);
     await db.query(await ProjectDbUtil.insertSessionId(await DateUtils.currentDate(), await browser.sessionId));
-    let result = await db.query(await ProjectDbUtil.getProjectId(await env.projectName));
+    let result = await db.query(await ProjectDbUtil.getProjectId(env.projectName));
     if(result.length === 0){
-      await db.query(await ProjectDbUtil.insertProject(env.projectName));
+        await db.query(await ProjectDbUtil.insertProject(env.projectName));
     }
   });
   beforeEach(async function(){
@@ -30,7 +30,7 @@ describe('User Inyerface', async () => {
       email : GeneratorUtils.generateString(env.generationSettings.lenght),
       password :  GeneratorUtils.generateCapitalLetters(1) + 
                   GeneratorUtils.generateNumbersString(1) +
-                  GeneratorUtils.generateNumbersString(env.generationSettings.lenght),
+                  GeneratorUtils.generateString(env.generationSettings.lenght),
       mailServer : GeneratorUtils.generateString(env.generationSettings.lenght),
       domain : GeneratorUtils.pickOneFromArray(env.generationSettings.domains)
     }
