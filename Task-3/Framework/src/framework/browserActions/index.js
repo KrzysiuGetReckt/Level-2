@@ -1,4 +1,4 @@
-const Logger = require('../logger');
+const { Logger } = require('../');
 
 module.exports = async function () {
 

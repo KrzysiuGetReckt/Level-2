@@ -1,17 +1,17 @@
 module.exports = {
-    post99: {
+    postNumber99: {
         userId: 10,
         id: 99,
         title: 'temporibus sit alias delectus eligendi possimus magni',
         body: 'quo deleniti praesentium dicta non quod\naut est molestias\nmolestias et officia quis nihil\nitaque dolorem quia',
     },
-    post150:{
+    postNumber150:{
         id: 150
     },
-    post1:{
+    postNumber1:{
         userId: 1
     },
-    user5: {
+    userNumber5: {
         id: 5,
         name: 'Chelsey Dietrich',
         username: 'Kamren',

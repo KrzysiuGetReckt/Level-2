@@ -1,4 +1,4 @@
-const GeneratorUtils = require("./generatorUtils");
+const { GeneratorUtils } = require("./");
 
 module.exports = class ArrayUtils{
     /**

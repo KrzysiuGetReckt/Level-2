@@ -1,5 +1,5 @@
 const unirest = require('unirest');
-const Logger = require('../logger');
+const { Logger } = require('../');
 
 module.exports = class ApiUtil{
     /**

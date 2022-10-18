@@ -1,5 +1,5 @@
-const projectApiUtil = require(`./projectApiUtil`);
+const ProjectApiUtil = require(`./projectApiUtil`);
 
 module.exports = {
-    projectApiUtil
+    ProjectApiUtil
 }
