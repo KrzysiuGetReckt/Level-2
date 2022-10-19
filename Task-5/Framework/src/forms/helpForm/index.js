@@ -1,7 +1,6 @@
 const BaseForm = require('../../framework/baseForm');
 const Element = require('../../framework/element');
 const ElementStateProvider = require('../../framework/element/elementStateProvider');
-const Logger = require('../../framework/logger');
 
 
 class HelpForm extends BaseForm {

@@ -3,7 +3,6 @@ module.exports = {
   testMethodName: "userInterface.check.site.selenium",
   projectName: "userInterface",
   buildNumber: 2,
-  envName: "Test",
   table: {
       numbers: [11, 22, 33, 44, 55, 66, 77, 88, 99]
   },

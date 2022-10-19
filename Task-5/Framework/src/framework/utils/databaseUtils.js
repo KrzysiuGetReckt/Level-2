@@ -1,6 +1,4 @@
 const mysql = require('mysql2/promise');
-const { error } = require('winston');
-const Logger = require('../logger');
 
 module.exports = class DatabaseUtils{
     
@@ -40,14 +38,9 @@ module.exports = class DatabaseUtils{
     * In it we set up the connection parameters and establish the connection. 
     */
 
-    async createConnection(credensialsEnviroment) {
+    async createConnection(dbConfig) {
         if(await this._isConnectionCreated() === false){
-            this._connection = await mysql.createConnection({
-                host: credensialsEnviroment.HOST,
-                user: credensialsEnviroment.USER,
-                password: credensialsEnviroment.PASSWORD,
-                database: credensialsEnviroment.DATABASE
-            });
+            this._connection = await mysql.createConnection(dbConfig);
         }
         return this._connection;
     }
@@ -69,10 +62,8 @@ module.exports = class DatabaseUtils{
     */
 
     async query(queryString){
-        if(await this._isConnectionCreated() === false){
-           await this.createConnection();
-        }
+        await this.isConnectionEstablished();
         const [rows, fields] = await this._connection.execute(queryString);
-        return rows;
+        return [rows, fields];
     }
 }

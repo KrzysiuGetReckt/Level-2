@@ -19,7 +19,6 @@
     },
     "dependencies": {
         "mysql2": "^2.3.3",
-        "mysql2-promise": "^0.1.4",
         "winston": "^3.8.2"
     }
 }

@@ -1,4 +1,4 @@
 module.exports = {
   ENVIRONMENT: process.env.ENVIRONMENT || 'test',
-  FILESAVEFIR: process.env.FILESAVEFIR || 'logs/logs.txt'
+  LOGSDIR: process.env.LOGSDIR || 'logs/logs.txt'
 };

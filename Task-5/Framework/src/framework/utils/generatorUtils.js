@@ -6,40 +6,46 @@ module.exports = class GeneratorUtils{
     */
     static generateString(number){
         let result           = '';
-        let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let charactersLength = characters.length;
+        const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         for ( let i = 0; i < number; i++ ) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
         }
         return result;
     }
     /**
-    * Generate a random string with small letters of set lenght
+    * Generate a random string with letters of set lenght
     * @param {int} number the length of the string
+    * @param {boolean} size - Default undefined not changing the behaviour of the method.
     * @returns {string} result the generated string
     */
-    static generateStringSmallLetters(number){
-        let result           = '';
-        let characters       = 'abcdefghijklmnopqrstuvwxyz';
-        let charactersLength = characters.length;
-        for ( let i = 0; i < number; i++ ) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+
+    static generateLetters(number, size = undefined){
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        for ( let i = 0; i < number; i++){
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+
+        if(size === true){
+            return result.toUpperCase();
+        }
+        if(size === false){
+            return result.toLowerCase();
         }
         return result;
     }
     /**
-    * Generate a random string of Capital Letters
+    * Generate random numbers as a string
     * @param {int} number the length of the string
-    * @returns {string} result the generated string of capital letters.
+    * @returns {string} string with one number.
     */
-    static generateCapitalLetters(number){
-        let result = '';
-        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        let charactersLength = characters.length;
+    static generateNumbersString(number){
+        let result ='';
+        const characters = '0123456789';
         for(let i=0; i < number; i++){
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
         }
-        return result;
+        return result;   
     }
     /**
     * Generate a random number to pick from an array
@@ -51,21 +57,6 @@ module.exports = class GeneratorUtils{
         let randomPick = Math.floor(Math.random() * array.length);
         return array[randomPick];
     }
-    /**
-    * Generate random numbers as a string
-    * @param {int} number the length of the string
-    * @returns {string} string with one number.
-    */
-    static generateNumbersString(number){
-        let result ="";
-        let characters = '0123456789';
-        let charactersLength = characters.length;
-        for(let i=0; i < number; i++){
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;   
-    }
-
     /**
     * Generating a number between the minimal value and the maximum.
     * @param {int} min the minimal value

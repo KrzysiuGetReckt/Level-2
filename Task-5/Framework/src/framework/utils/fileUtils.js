@@ -10,7 +10,7 @@ module.exports = class FileUtil{
     * @returns {object} the read contents of the file.
     */
     static readFile(path){
-        Logger.info(process.cwd());
-        return fs.readFileSync(path, 'utf8')
+        Logger.info(`${process.cwd()} and the set path is ${path}`);
+        return fs.readFileSync(path, 'utf8');
     }
 }

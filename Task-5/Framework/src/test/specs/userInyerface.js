@@ -1,14 +1,17 @@
 const { expect } = require('chai');
 
 const { ENVIRONMENT } = require('../../environment/envConfig');
-const env = require(`../../environment/testEnvironment`); 
+const env = require(`../../environment/${ENVIRONMENT}Environment`); 
 const credensialsEnviroment = require('../../environment/credensialsEnviroment');
 const { IntrestPage, HomePage, LoginPage } = require('../../pages');
-const { GeneratorUtils, DatabaseUtils, DateUtils, ArrayUtils} = require('../../framework/utils');
+const { GeneratorUtils, DatabaseUtils, DateUtils, ArrayUtils, FileUtils} = require('../../framework/utils');
+const { insertSessionId, getProjectId, insertProject,
+        getStateId, getSessionId, insertTest, getTestIdByName,
+        insertLog } = require('../testData/queries')
 const { Login } = require('../steps');
 const HelpForm = require('../../forms/helpForm');
 const CookieForm = require('../../forms/cookieForm');
-const { ProjectDbUtil } = require('../../projectUtils');
+const TestUtil = require('../../projectUtils/testUtil');
 
 const testStartTime = DateUtils.currentDate();
 const db = new DatabaseUtils;
@@ -16,10 +19,10 @@ const db = new DatabaseUtils;
 describe('User Inyerface', async () => {
   before(async function(){
     await db.createConnection(credensialsEnviroment);
-    await db.query(await ProjectDbUtil.insertSessionId(await DateUtils.currentDate(), await browser.sessionId));
-    let result = await db.query(await ProjectDbUtil.getProjectId(env.projectName));
-    if(result.length === 0){
-        await db.query(await ProjectDbUtil.insertProject(env.projectName));
+    await db.query(insertSessionId(await DateUtils.currentDate(), await browser.sessionId));
+    const result = await db.query(getProjectId(env.projectName));
+    if(Object.keys(result[0]).length == false){
+        await db.query(insertProject(env.projectName));
     }
   });
   beforeEach(async function(){
@@ -28,7 +31,7 @@ describe('User Inyerface', async () => {
   it('Test case 1 - Check if properly picked 3 random intrest', async () => {
     const loginCredentials = {
       email : GeneratorUtils.generateString(env.generationSettings.lenght),
-      password :  GeneratorUtils.generateCapitalLetters(1) + 
+      password :  GeneratorUtils.generateLetters(1, true) + 
                   GeneratorUtils.generateNumbersString(1) +
                   GeneratorUtils.generateString(env.generationSettings.lenght),
       mailServer : GeneratorUtils.generateString(env.generationSettings.lenght),
@@ -42,7 +45,7 @@ describe('User Inyerface', async () => {
     await IntrestPage.waitForFormIsOpened(); // the 2 / 4 card is open.
     await IntrestPage.resetIntrests();
 
-    let pickOutIntrests = await ArrayUtils.selectNumberOfItems(env.generationSettings.intrests, 3);
+    const pickOutIntrests = await ArrayUtils.selectNumberOfItems(env.generationSettings.intrests, 3);
     for (const pickOutIntrest of pickOutIntrests){
       await IntrestPage.clickIntrest(pickOutIntrest);
     }
@@ -73,25 +76,16 @@ describe('User Inyerface', async () => {
   });
 
   afterEach(async function(){
-    let state = await this.currentTest.state;
-    let statusId = await db.query(await ProjectDbUtil.getStateId(await state.toUpperCase()));
-    let projectId = await db.query(await ProjectDbUtil.getProjectId(await env.projectName));
-    let sessionId = await db.query(await ProjectDbUtil.getSessionId(await browser.sessionId));
+    const state = await this.currentTest.state;
+    const statusId = await db.query(getStateId(await state.toUpperCase()));
+    const projectId = await db.query(getProjectId(await env.projectName));
+    const sessionId = await db.query(getSessionId(await browser.sessionId));
 
-    const testData = {
-      name: await this.currentTest.title,
-      statusId: statusId[0].id,
-      //test method is provided by env.
-      projectId: projectId[0].id,
-      sessionId: sessionId[0].id,
-      testStartTime: testStartTime,
-      testEndTime: await DateUtils.currentDate(),
-      //env is provided by env
-      browser: await browser.requestedCapabilities.browserName,
-    }
-    await db.query(await ProjectDbUtil.insertTest(testData));
-    let testId = await db.query(await ProjectDbUtil.getTestIdByName(testData.name));
-    await db.query(await ProjectDbUtil.insertLog(testId[0].id));
+    await db.query(insertTest(TestUtil.saveTest(this.currentTest.title, statusId, projectId, sessionId, testStartTime)));
+
+    const testId = await db.query(getTestIdByName(this.currentTest.title));
+    const logs = await FileUtils.readFile(process.cwd() + '/logs/logs.txt');
+    await db.query(insertLog(testId[0][0].id, logs));
   });
 
   after(async function () {

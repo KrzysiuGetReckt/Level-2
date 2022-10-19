@@ -1,6 +1,6 @@
-const ProjectDbUtil = require('./projectDbUtil');
 const CredentialsUtil = require('./credentialsUtil');
+const TestUtil = require('./testUtil');
 module.exports = {
-    ProjectDbUtil,
-    CredentialsUtil
+    CredentialsUtil,
+    TestUtil
 }

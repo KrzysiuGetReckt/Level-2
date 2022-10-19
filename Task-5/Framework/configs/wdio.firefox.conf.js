@@ -8,7 +8,7 @@ exports.config = {
         maxInstances: 3,
         browserName: 'firefox',
         acceptInsecureCerts: true,
-        'goog:chromeOptions': {
+        'moz:firefoxOptions': {
           args: ['-incognito', '-no-sandbox', '-disable-dev-shm-usage']
         }
       },
