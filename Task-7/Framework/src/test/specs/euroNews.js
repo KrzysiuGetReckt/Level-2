@@ -11,8 +11,6 @@ const { TestSteps } = require('../steps');
 const Timeouts = require('../../environment/timeouts');
 
 describe(`Testing Google Api with ${env.startUrl}`, async () => {
-  before(async function(){
-  });
   beforeEach(async function(){
     await browser.url(env.startUrl);
   });
@@ -24,7 +22,7 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
     let options = await NewsLetterPage.getNewsLetterOptionsAttribute('for');
     options.pop();  // Deleting option 1 and last because they don't work on the Euronews site. 
     options.shift();
-    let store = options[0]; // Deleting the third option as it doesn't work too...
+    const store = options[0]; // Deleting the third option as it doesn't work too...
     options.shift();
     options.shift();
     options.unshift(store);
@@ -63,7 +61,7 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
       xpath: 'css selector',
       locator: `${attribute} > iframe`
     }
-    let iframeLocator = await browser.findElement(newsletterOpened.xpath, newsletterOpened.locator);
+    const iframeLocator = await browser.findElement(newsletterOpened.xpath, newsletterOpened.locator);
     await browser.switchToFrame(iframeLocator);
     await PreviewPage.waitForFormIsOpened();
     attribute = await PreviewPage.GetUnsubscribeAttribute('href');
@@ -74,9 +72,5 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
     await NewsletterUnsubscriptionPage.isUnsubscriptionMessageDisplayed(); //Checking if the text is displayed.
     expect(await TestSteps.checkEmailList()).to.equal(1);
 
-  });
-  afterEach(async function(){
-  });
-  after(async function () {
   });
 })
