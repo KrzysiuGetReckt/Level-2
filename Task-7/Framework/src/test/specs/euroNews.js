@@ -6,7 +6,7 @@ const env = require(`../../environment/${ENVIRONMENT}Environment`);
 const { HomePage, NewsLetterPage, ConfirmationPage, PreviewPage, NewsletterUnsubscriptionPage } = require('../../pages');
 const { ApiUtils, GeneratorUtils } = require('../../framework/utils');
 const { NewsLetterForm, CompleateSubscription } = require('../../forms');
-const { ApiRequests, TestData} = require('../testData');
+const { ApiRequests, TestData, ApiStatusCodes} = require('../testData');
 const { TestSteps } = require('../steps');
 const Timeouts = require('../../environment/timeouts');
 
@@ -42,9 +42,9 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
       }
     );
     let response = await ApiUtils.get(ApiRequests.getSpecificMail.url('noreply@euronews.com'), ApiRequests.header(TOKEN)); //Getting the emails
-    expect(response.status).to.equal(200, 'The response code is not OK');
+    expect(response.status).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
     response = await ApiUtils.get(ApiRequests.getContentMail.url(response.body.messages[0].id), ApiRequests.header(TOKEN)); //Getting the body of the exact email.
-    expect(response.status).to.equal(200, 'The response code is not OK');
+    expect(response.status).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
     const encodedMessage = response.body.payload["parts"][0].body.data;
     const decodedMessage = await Buffer.from(encodedMessage, 'base64').toString('ascii'); //Decoding the body.
     let message = cherio.load(decodedMessage);
