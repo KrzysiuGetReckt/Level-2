@@ -1,4 +1,5 @@
 const mysql = require('mysql2/promise');
+const Logger = require('../logger');
 
 module.exports = class DatabaseUtils{
     
@@ -33,6 +34,17 @@ module.exports = class DatabaseUtils{
     }
 
     /**
+    * This checks if there is NO established connection.
+    * If there is none. It throws an error stopping the program. 
+    */
+
+    async isConnectionNotEstablished(){
+        if(await this._isConnectionCreated()){
+            throw new Error('The connection is established');
+        }
+    }
+
+    /**
     * Creates a Db connection and then return it or returns the existing one.
     * The if block is run if there is no existing connection.
     * In it we set up the connection parameters and establish the connection. 
@@ -62,7 +74,12 @@ module.exports = class DatabaseUtils{
     */
 
     async query(queryString){
-        await this.isConnectionEstablished();
+        try{
+            await this.isConnectionEstablished();
+        }catch(err){
+            throw err;
+        }
+        Logger.info(`Executing query to Database.`);
         const [rows, fields] = await this._connection.execute(queryString);
         return [rows, fields];
     }

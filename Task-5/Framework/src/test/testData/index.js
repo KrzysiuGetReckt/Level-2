@@ -1,6 +1,7 @@
-const Credentials = require('./credentials');
+const TestSettings = require('./testSettings');
 const Queries = require('./queries');
+
 module.exports ={
-    Credentials,
+    TestSettings,
     Queries
 }

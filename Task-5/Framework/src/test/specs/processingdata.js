@@ -5,9 +5,10 @@ const env = require(`../../environment/${ENVIRONMENT}Environment`);
 const { DatabaseUtils } = require('../../framework/utils');
 const { insertAuthor, getProjectId, insertProject, getAuthorIdByName, updateTest, getTestProject, deleteTestById, getTestIdById } = require('../testData/queries');
 const credensialsEnviroment = require('../../environment/credensialsEnviroment');
-const { Credentials } = require('../testData');
+const { TestSettings } = require('../testData');
+const { Credentials } = require('../steps');
 
-const db = new DatabaseUtils;
+const db = new DatabaseUtils();
 
 describe('Database Test', async () => {
     before(async function(){
@@ -19,7 +20,7 @@ describe('Database Test', async () => {
         }
     });
     it('TC-2. Processing of test data', async () => {
-        for(const value of env.table.numbers){
+        for(const value of TestSettings.table.numbers){
             const projectId = await db.query(getProjectId(await env.projectName));
             const authorId = await db.query(getAuthorIdByName(await Credentials.authorName));
             const data = {
@@ -35,7 +36,7 @@ describe('Database Test', async () => {
     });
 
     after(async function(){
-        for(const value of env.table.numbers){
+        for(const value of TestSettings.table.numbers){
             await db.query(deleteTestById(value));
             const result = await db.query(getTestIdById(value));
             expect(Object.keys(result[0]).length).to.equal(0, 'The record is not deleted');

@@ -1,17 +1,17 @@
 const { expect } = require('chai');
 
-const { ENVIRONMENT } = require('../../environment/envConfig');
+const { ENVIRONMENT, LOGSDIR } = require('../../environment/envConfig');
 const env = require(`../../environment/${ENVIRONMENT}Environment`); 
 const credensialsEnviroment = require('../../environment/credensialsEnviroment');
 const { IntrestPage, HomePage, LoginPage } = require('../../pages');
 const { GeneratorUtils, DatabaseUtils, DateUtils, ArrayUtils, FileUtils} = require('../../framework/utils');
 const { insertSessionId, getProjectId, insertProject,
         getStateId, getSessionId, insertTest, getTestIdByName,
-        insertLog } = require('../testData/queries')
+        insertLog } = require('../testData/queries');
 const { Login } = require('../steps');
-const HelpForm = require('../../forms/helpForm');
-const CookieForm = require('../../forms/cookieForm');
+const { CookieForm, HelpForm } = require('../../forms');
 const TestUtil = require('../../projectUtils/testUtil');
+const { TestSettings } = require('../testData');
 
 const testStartTime = DateUtils.currentDate();
 const db = new DatabaseUtils;
@@ -30,12 +30,12 @@ describe('User Inyerface', async () => {
   });
   it('Test case 1 - Check if properly picked 3 random intrest', async () => {
     const loginCredentials = {
-      email : GeneratorUtils.generateString(env.generationSettings.lenght),
+      email : GeneratorUtils.generateString(TestSettings.generationSettings.lenght),
       password :  GeneratorUtils.generateLetters(1, true) + 
                   GeneratorUtils.generateNumbersString(1) +
-                  GeneratorUtils.generateString(env.generationSettings.lenght),
-      mailServer : GeneratorUtils.generateString(env.generationSettings.lenght),
-      domain : GeneratorUtils.pickOneFromArray(env.generationSettings.domains)
+                  GeneratorUtils.generateString(TestSettings.generationSettings.lenght),
+      mailServer : GeneratorUtils.generateString(TestSettings.generationSettings.lenght),
+      domain : GeneratorUtils.pickOneFromArray(TestSettings.generationSettings.domains)
     }
     await HomePage.waitForFormIsOpened();
     await HomePage.clickHere();
@@ -45,7 +45,7 @@ describe('User Inyerface', async () => {
     await IntrestPage.waitForFormIsOpened(); // the 2 / 4 card is open.
     await IntrestPage.resetIntrests();
 
-    const pickOutIntrests = await ArrayUtils.selectNumberOfItems(env.generationSettings.intrests, 3);
+    const pickOutIntrests = await ArrayUtils.selectNumberOfItems(TestSettings.generationSettings.intrests, 3);
     for (const pickOutIntrest of pickOutIntrests){
       await IntrestPage.clickIntrest(pickOutIntrest);
     }
@@ -72,7 +72,7 @@ describe('User Inyerface', async () => {
     await HomePage.waitForFormIsOpened();
     await HomePage.clickHere();
     await LoginPage.waitForFormIsOpened();
-    expect(await LoginPage.getTimerTime()).to.be.equal(env.expected.timer);
+    expect(await LoginPage.getTimerTime()).to.be.equal(TestSettings.expected.timer);
   });
 
   afterEach(async function(){
@@ -81,10 +81,10 @@ describe('User Inyerface', async () => {
     const projectId = await db.query(getProjectId(await env.projectName));
     const sessionId = await db.query(getSessionId(await browser.sessionId));
 
-    await db.query(insertTest(TestUtil.saveTest(this.currentTest.title, statusId, projectId, sessionId, testStartTime)));
+    await db.query(insertTest(TestUtil.saveTest(this.currentTest.title, statusId[0][0].id, projectId[0][0].id, sessionId[0][0].id, testStartTime)));
 
     const testId = await db.query(getTestIdByName(this.currentTest.title));
-    const logs = await FileUtils.readFile(process.cwd() + '/logs/logs.txt');
+    const logs = await FileUtils.readFile(`${process.cwd()}/${LOGSDIR}`);
     await db.query(insertLog(testId[0][0].id, logs));
   });
 
