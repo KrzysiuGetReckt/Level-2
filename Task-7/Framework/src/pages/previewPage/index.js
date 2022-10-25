@@ -9,7 +9,7 @@ module.exports = new class PreviewPage extends BaseForm{
         super('//a[contains(text(), "Online version")]', `Newsletter Preview iframe of ${env.startUrl}`)
     }
 
-    iframeLocator(attribute){return new Element('css selector', `${attribute} > iframe`, '"Iframe locator" Iframe')};
+    iframeLocator(attribute){return new Element(`${attribute} > iframe`, '"IframeId" Iframe')};
     get unsubscribeLink(){return new Element('//a[contains(text(), "unsubscribe by clicking here")]', '"Unsubscribe here" Link')};
 
     async getUnsubscribeUrl(){
@@ -18,6 +18,6 @@ module.exports = new class PreviewPage extends BaseForm{
     }
 
     async changeToIframe(attribute){
-        return browser.switchToFrame(await this.iframeLocator(attribute));
+        return browser.switchToFrame(await browser.findElement('css selector', await this.iframeLocator(attribute).locator));
     }
 }

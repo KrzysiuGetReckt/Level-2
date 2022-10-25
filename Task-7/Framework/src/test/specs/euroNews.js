@@ -19,14 +19,14 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
     await HomePage.clickNewsletters();
     await NewsLetterPage.waitForFormIsOpened();
     let options = await NewsLetterPage.getNewsLetterOptionsAttribute();
-    let pickedIndex = await GeneratorUtils.getRandomNumberExceptGivenOnes(Object.length(options), array);
+    let pickedIndex = await GeneratorUtils.getRandomNumberExceptGivenOnes(Object.keys(options).length, TestData.excludItems);
     await NewsLetterPage.clickNewsLetterOption(options[pickedIndex]);
     await NewsLetterForm.waitForFormIsOpened();
     await NewsLetterForm.isFormOpened();
     await NewsLetterForm.setEmail(EMAIL);
     await NewsLetterForm.submitEmail();
     await CompleateSubscription.waitForFormIsOpened();
-    await ProjectApiUtils.waitTillEmail();
+    await ProjectApiUtils.waitTillEmail(TOKEN);
     let response = await ApiUtils.get(ApiRequests.getSpecificMail.url('noreply@euronews.com'), ApiRequests.header(TOKEN)); //Getting the emails
     expect(response.status).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
     response = await ApiUtils.get(ApiRequests.getContentMail.url(response.body.messages[0].id), ApiRequests.header(TOKEN)); //Getting the body of the exact email
@@ -40,8 +40,8 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
     await ConfirmationPage.clickBackToSite();
     await HomePage.isFormOpened();
     await HomePage.clickNewsletters();
-    const hrefAttribute = await NewsLetterPage.getNewsLetterAttribute(pickedNewsletter);
-    await NewsLetterPage.clickNewsLetterPreview(pickedNewsletter);
+    const hrefAttribute = await NewsLetterPage.getNewsLetterAttribute(options[pickedIndex]);
+    await NewsLetterPage.clickNewsLetterPreview(options[pickedIndex]);
     await PreviewPage.changeToIframe(hrefAttribute);
     await PreviewPage.waitForFormIsOpened();
     const url = await PreviewPage.getUnsubscribeUrl();
@@ -50,6 +50,6 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
     await NewsletterUnsubscriptionPage.setEmailText(EMAIL);
     await NewsletterUnsubscriptionPage.clickConfirmUnsubscription();
     await NewsletterUnsubscriptionPage.isUnsubscriptionMessageDisplayed(); //Checking if the text is displayed.
-    expect(await ProjectApiUtils.checkEmailList()).to.equal(1);
+    expect(await ProjectApiUtils.checkEmailList(TOKEN)).to.equal(1);
   });
 })

@@ -8,15 +8,15 @@ const env = require(`../environment/${ENVIRONMENT}Environment`);
 const Timeouts = require('../environment/timeouts')
 
 module.exports = new class ProjectApiUtils{
-    async checkEmailList(){
+    async checkEmailList(TOKEN){
         let response = await ApiUtils.get(ApiRequests.getMailList.url(), ApiRequests.header(TOKEN));
         expect(response.status).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
         return response.body.resultSizeEstimate;
     }
 
-    async waitTillEmail(){
+    async waitTillEmail(TOKEN){
         return await browser.waitUntil(
-            async () => (await this.checkEmailList()) != 0,
+            async () => (await this.checkEmailList(TOKEN)) != 0,
             {
                 timeout: Timeouts.timeout,
                 timeoutMsg: 'expected email not found after 50s',
