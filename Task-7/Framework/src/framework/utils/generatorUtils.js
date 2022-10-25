@@ -1,3 +1,5 @@
+const Logger = require("../logger");
+
 module.exports = class GeneratorUtils{
     /**
     * Generate a random string with characters of set lenght
@@ -67,6 +69,7 @@ module.exports = class GeneratorUtils{
         const keys = Object.keys(object);
         return object[keys[keys.length * Math.random() << 0]];
     }
+
     /**
     * Generating a number between the minimal value and the maximum.
     * @param {int} min the minimal value
@@ -77,5 +80,19 @@ module.exports = class GeneratorUtils{
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    /**
+     * Generate a random number expect the ones given.
+     * @param {number} length of the number. 
+     * @param {array} numbersNotToInclude an array of numbers that shouldn't be included in the random pick.
+     * @returns the generated number with the exeption.
+     */
+    static getRandomNumberExceptGivenOnes(length, numbersNotToInclude) {
+        let num;
+        while (!num || numbersNotToInclude.includes(num)) {
+            num = Math.floor(Math.random() * length);
+        }
+        return num;
     }
 };

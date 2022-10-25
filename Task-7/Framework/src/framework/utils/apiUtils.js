@@ -7,7 +7,7 @@ module.exports = class ApiUtils{
     * @param {string} url the url that the get request will be sent on
     * @return Returns a request body with the gathered information. 
     */
-    static async get(url, header=undefined){
+    static async get(url, header){
         Logger.info(`Sending Get request at: ${url} with header: ${JSON.stringify(header)}`);
         return unirest.get(url).headers(header);
     }
@@ -19,7 +19,7 @@ module.exports = class ApiUtils{
     * Formated in a object = { key: value, ..., key: value} format.
     * @return Returns a request body with the gathered information. 
     */
-    static async post(url, header=undefined, data=undefined){
+    static async post(url, header, data){
         Logger.info(`Sending Post request at: ${url} with header: ${JSON.stringify(header)} and data: ${JSON.stringify(data)}`);
         return unirest.post(url).headers(header).send(data);
     }

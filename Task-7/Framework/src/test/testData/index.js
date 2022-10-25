@@ -1,9 +1,9 @@
 const ApiRequests = require('./apiRequests');
+const ApiStatusCodes = require('./apiStatusCodes');
 const TestData = require('./testData');
-const ApiStatusCodes = require('./apiStatusCodes')
 
 module.exports = {
     ApiRequests,
-    TestData,
-    ApiStatusCodes
+    ApiStatusCodes,
+    TestData
 }

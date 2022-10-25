@@ -1,3 +1,3 @@
-module.exports ={
-    email: 'gsnyhvszhu@gmail.com',
+module.exports = {
+    excludItems: [0, 2, 7],
 }

@@ -4,17 +4,19 @@ const ElementStateProvider = require('../../framework/element/elementStateProvid
 const { ENVIRONMENT } = require('../../environment/envConfig');
 const env = require(`../../environment/${ENVIRONMENT}Environment`); 
 
-class NewsLetterForm extends BaseForm {
+const registerNewslettersForm = '//form[@id="register-newsletters-form"]';
+
+module.exports = new class NewsLetterForm extends BaseForm {
 
   constructor() {
     super('#register-newsletters-form', `NewsLetter Form of ${env.startUrl}`);
   }
   
-  get emailInput(){return new Element('//form[@id="register-newsletters-form"]//input[@type="email"]', '"Email" input')};
-  get emailSubmitButton(){return new Element( '//form[@id="register-newsletters-form"]//input[@type="submit"]' , '"Email Submit" Button')};
+  get emailInput(){return new Element(`${registerNewslettersForm}//input[@type="email"]`, '"Email" input')};
+  get emailSubmitButton(){return new Element( `${registerNewslettersForm}//input[@type="submit"]` , '"Email Submit" Button')};
 
   async setEmail(email){
-    return this.emailInput._clearAndSetText(email);
+    return this.emailInput.clearAndType(email);
   }
 
   async submitEmail(){
@@ -22,5 +24,3 @@ class NewsLetterForm extends BaseForm {
   }
 
 }
-
-module.exports = new NewsLetterForm();

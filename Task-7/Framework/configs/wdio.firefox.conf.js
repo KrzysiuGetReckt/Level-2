@@ -9,7 +9,7 @@ exports.config = {
         browserName: 'firefox',
         acceptInsecureCerts: true,
         'moz:firefoxOptions': {
-          args: ['-incognito', '-no-sandbox', '-disable-dev-shm-usage']
+          args: ['-private', '-no-sandbox', '-disable-dev-shm-usage']
         }
       },
     ],

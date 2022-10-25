@@ -13,12 +13,12 @@ module.exports = new class NewsletterPage extends BaseForm {
   newsLetterSeePreview = (subscriptionPlanId) => {return new Element(`//*[@id="${subscriptionPlanId}"]/../../a`, `The preview of: ${subscriptionPlanId}`)}
   get newsLetterOptionsLabels() {return new Element('//form[@id="newsletters-form"]//label[@for][1]', '"Select all newsLetterOptions"')};
 
-  async getNewsLetterOptionsAttribute(attribute){
-    return this.newsLetterOptionsLabels.getAttributeFromElements(attribute);
+  async getNewsLetterOptionsAttribute(){
+    return this.newsLetterOptionsLabels.getAttributeFromElements('for');
   }
 
-  async getNewsLetterAAttribute(subscriptionPlanId, attribute){
-    return this.newsLetterSeePreview(subscriptionPlanId).getAttributeFromElements(attribute);
+  async getNewsLetterAttribute(subscriptionPlanId){
+    return this.newsLetterSeePreview(subscriptionPlanId).getAttributeFromElements('href');
   }
 
   async clickNewsLetterOption(subscriptionPlanId){

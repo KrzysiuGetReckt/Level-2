@@ -11,7 +11,7 @@ module.exports = new class NewsletterUnsubscriptionPage extends BaseForm{
     }
 
     get emailInput(){return new Element('#email', '"Email" Input')};
-    get confirmUnsubscriptionButton(){return new Element('button' , '"Confirm unsubscription" Button')};
+    get confirmUnsubscriptionButton(){return new Element('//button[contains(text(), "Confirm unsubscription")]' , '"Confirm unsubscription" Button')};
     get unsubscriptionMessage(){return new Element('//strong[contains(text(), "You are unsubscribed.")]', '"Unsubscription" Text')};
 
     async setEmailText(email){

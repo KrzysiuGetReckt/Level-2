@@ -1,14 +1,13 @@
 const { expect } = require('chai');
-const cherio = require('cheerio');
 
-const { ENVIRONMENT, TOKEN } = require('../../environment/envConfig');
+const { ENVIRONMENT} = require('../../environment/envConfig');
+const { EMAIL, TOKEN } = require('../../environment/credensialsEnviroment');
 const env = require(`../../environment/${ENVIRONMENT}Environment`); 
 const { HomePage, NewsLetterPage, ConfirmationPage, PreviewPage, NewsletterUnsubscriptionPage } = require('../../pages');
-const { ApiUtils, GeneratorUtils } = require('../../framework/utils');
+const { ApiUtils, GeneratorUtils, DecodeUtils } = require('../../framework/utils');
 const { NewsLetterForm, CompleateSubscription } = require('../../forms');
-const { ApiRequests, TestData, ApiStatusCodes} = require('../testData');
-const { TestSteps } = require('../steps');
-const Timeouts = require('../../environment/timeouts');
+const { ApiRequests, ApiStatusCodes, TestData} = require('../testData');
+const { ProjectApiUtils, CherioUtils } = require('../../projectUtils');
 
 describe(`Testing Google Api with ${env.startUrl}`, async () => {
   beforeEach(async function(){
@@ -19,58 +18,38 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
     await HomePage.clickContiniueWithoutAgreeing();
     await HomePage.clickNewsletters();
     await NewsLetterPage.waitForFormIsOpened();
-    let options = await NewsLetterPage.getNewsLetterOptionsAttribute('for');
-    options.pop();  // Deleting option 1 and last because they don't work on the Euronews site. 
-    options.shift();
-    const store = options[0]; // Deleting the third option as it doesn't work too...
-    options.shift();
-    options.shift();
-    options.unshift(store);
-    const pickedNewsletter = GeneratorUtils.pickOneFromObject(options);
-    await NewsLetterPage.clickNewsLetterOption(pickedNewsletter);
+    let options = await NewsLetterPage.getNewsLetterOptionsAttribute();
+    let pickedIndex = await GeneratorUtils.getRandomNumberExceptGivenOnes(Object.length(options), array);
+    await NewsLetterPage.clickNewsLetterOption(options[pickedIndex]);
     await NewsLetterForm.waitForFormIsOpened();
     await NewsLetterForm.isFormOpened();
-    await NewsLetterForm.setEmail(TestData.email);
+    await NewsLetterForm.setEmail(EMAIL);
     await NewsLetterForm.submitEmail();
     await CompleateSubscription.waitForFormIsOpened();
-    await browser.waitUntil(
-      async () => (await TestSteps.checkEmailList()) != 0,
-      {
-          timeout: Timeouts.timeout,
-          timeoutMsg: 'expected email not found after 50s',
-          interval: Timeouts.interval,
-      }
-    );
+    await ProjectApiUtils.waitTillEmail();
     let response = await ApiUtils.get(ApiRequests.getSpecificMail.url('noreply@euronews.com'), ApiRequests.header(TOKEN)); //Getting the emails
     expect(response.status).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
-    response = await ApiUtils.get(ApiRequests.getContentMail.url(response.body.messages[0].id), ApiRequests.header(TOKEN)); //Getting the body of the exact email.
+    response = await ApiUtils.get(ApiRequests.getContentMail.url(response.body.messages[0].id), ApiRequests.header(TOKEN)); //Getting the body of the exact email
     expect(response.status).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
     const encodedMessage = response.body.payload["parts"][0].body.data;
-    const decodedMessage = await Buffer.from(encodedMessage, 'base64').toString('ascii'); //Decoding the body.
-    let message = cherio.load(decodedMessage);
-    message = message('a').attr('href');
-    await browser.url(message);
+    const decodedMessage = await DecodeUtils.encode(encodedMessage, 'base64', 'ascii'); //Decoding the body
+    //Getting the href from the html document that is the decoded E-mail message
+    //And going to that specific url
+    await browser.url(await CherioUtils.getTagAttributeFromString(decodedMessage, 'a', 'href')); 
     await ConfirmationPage.isFormOpened();
     await ConfirmationPage.clickBackToSite();
     await HomePage.isFormOpened();
     await HomePage.clickNewsletters();
-    let attribute = await NewsLetterPage.getNewsLetterAAttribute(pickedNewsletter, 'href');
+    const hrefAttribute = await NewsLetterPage.getNewsLetterAttribute(pickedNewsletter);
     await NewsLetterPage.clickNewsLetterPreview(pickedNewsletter);
-
-    let newsletterOpened ={
-      xpath: 'css selector',
-      locator: `${attribute} > iframe`
-    }
-    const iframeLocator = await browser.findElement(newsletterOpened.xpath, newsletterOpened.locator);
-    await browser.switchToFrame(iframeLocator);
+    await PreviewPage.changeToIframe(hrefAttribute);
     await PreviewPage.waitForFormIsOpened();
-    attribute = await PreviewPage.GetUnsubscribeAttribute('href');
-    await browser.url(attribute[0]);
+    const url = await PreviewPage.getUnsubscribeUrl();
+    await browser.url(url[0]);
     await NewsletterUnsubscriptionPage.waitForFormIsOpened();
-    await NewsletterUnsubscriptionPage.setEmailText(TestData.email);
+    await NewsletterUnsubscriptionPage.setEmailText(EMAIL);
     await NewsletterUnsubscriptionPage.clickConfirmUnsubscription();
     await NewsletterUnsubscriptionPage.isUnsubscriptionMessageDisplayed(); //Checking if the text is displayed.
-    expect(await TestSteps.checkEmailList()).to.equal(1);
-
+    expect(await ProjectApiUtils.checkEmailList()).to.equal(1);
   });
 })

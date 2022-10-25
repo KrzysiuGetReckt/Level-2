@@ -3,10 +3,10 @@ const Element = require('../../framework/element');
 const { ENVIRONMENT } = require('../../environment/envConfig');
 const env = require(`../../environment/${ENVIRONMENT}Environment`); 
 
-class HomePage extends BaseForm {
+module.exports = new class HomePage extends BaseForm {
 
   constructor() {
-    super('//section[@data-event-title="titre test"]', `Home page of $${env.startUrl}`);
+    super('//section[@data-event-title="titre test"]', `Home page of ${env.startUrl}`);
   }
 
   get continiueWithoutAgreeingButton() {return new Element('//span[@class="didomi-continue-without-agreeing"]', '"Continoue without agreeing" link')}  
@@ -20,5 +20,3 @@ class HomePage extends BaseForm {
     return this.newslettersButton.click();
   }
 }
-
-module.exports = new HomePage();
