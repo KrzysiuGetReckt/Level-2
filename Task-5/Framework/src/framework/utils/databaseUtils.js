@@ -16,9 +16,11 @@ module.exports = class DatabaseUtils{
 
     async _isConnectionCreated(){
         try {
+            Logger.info('Checking the connection');
             this._connection.ping();
             return true;
         } catch (error) {
+            Logger.info('Connection is not created');
             return false;
         }
     }
@@ -54,12 +56,14 @@ module.exports = class DatabaseUtils{
 
     async createConnection(dbConfig) {
         try {
+            Logger.info('Creating the connection');
             if(await this._isConnectionCreated() === false){
                 this._connection = await mysql.createConnection(dbConfig);
             }
             this.isConnectionEstablished();
             return this._connection;
         } catch (err) {
+            Logger.info('The connections was not created')
             throw err;
         }
     }
@@ -69,11 +73,12 @@ module.exports = class DatabaseUtils{
     */
 
     async endConnection() {
-        await this._connection.end();
         try{
+            Logger.info('Ending the connection to the database');
+            await this._connection.end();
             this.isConnectionNotEstablished();
-            this._connection = null;
         }catch(err){
+            Logger.info('The connection was not ended');
             throw err;
         }
     }
@@ -92,6 +97,7 @@ module.exports = class DatabaseUtils{
             const [rows, fields] = await this._connection.execute(queryString);
             return [rows, fields];
         }catch(err){
+            Logger.info('The querry was not executed');
             throw err;
         }
     }

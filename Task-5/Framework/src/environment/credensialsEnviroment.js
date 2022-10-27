@@ -1,6 +1,6 @@
 module.exports = {
-    host : process.env.HOST || 'localhost',
-    user : process.env.USER || 'root',
+    host : process.env.HOST || '',
+    user : process.env.USER || '',
     password : process.env.PASSWORD || '',
-    database : process.env.DATABASE || 'union_reporting'
+    database : process.env.DATABASE || ''
 }

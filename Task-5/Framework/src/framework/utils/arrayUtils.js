@@ -1,12 +1,15 @@
+const Logger = require("../logger");
 const GeneratorUtils = require("./generatorUtils");
 
 module.exports = class ArrayUtils{
     /**
-    * Generate a random string with characters of set lenght
-    * @param {number} number the lenght of the string
-    * @returns {string} result the generated string
+    * Removing an exact item form an array
+    * @param {array} array The array of items
+    * @param {number} item the index of the item
+    * @returns {array} the new array 
     */
     static removeExactItem(array , item){
+        Logger.info(`Removing exact item.`);
         let index = array.indexOf(item);
         if(index !== -1){
             array.splice(index, 1);
@@ -21,6 +24,7 @@ module.exports = class ArrayUtils{
     * @returns {string} result the generated string
     */
     static selectNumberOfItems(array, number){
+        Logger.info('Selecting items from the array.')
         let pickedItems = [];
         for(let i = 0; i < number; i++){
             let pickedItem = GeneratorUtils.pickOneFromArray(array);

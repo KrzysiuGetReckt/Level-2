@@ -1,3 +1,5 @@
+const Logger = require('../logger');
+
 module.exports = class GeneratorUtils{
     /**
     * Generate a random string with characters of set lenght
@@ -5,6 +7,7 @@ module.exports = class GeneratorUtils{
     * @returns {string} result the generated string
     */
     static generateString(number){
+        Logger.info('Generating a string');
         let result           = '';
         const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         for ( let i = 0; i < number; i++ ) {
@@ -20,6 +23,7 @@ module.exports = class GeneratorUtils{
     */
 
     static generateLetters(number, size = undefined){
+        Logger.info('Generating a string without numbers');
         let result = '';
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
         for ( let i = 0; i < number; i++){
@@ -40,6 +44,7 @@ module.exports = class GeneratorUtils{
     * @returns {string} string with one number.
     */
     static generateNumbersString(number){
+        Logger.info('Generating a string of numbers');
         let result ='';
         const characters = '0123456789';
         for(let i=0; i < number; i++){
@@ -54,6 +59,7 @@ module.exports = class GeneratorUtils{
     * @returns {array[randomPick]} array[randomPick] the array element that's randomly picked.
     */
     static pickOneFromArray(array){
+        Logger.info('Picking a random item form an array');
         let randomPick = Math.floor(Math.random() * array.length);
         return array[randomPick];
     }
@@ -64,6 +70,7 @@ module.exports = class GeneratorUtils{
     * @returns {int} the random number in the range <min, max>
     */
     static generateNumber(min, max){
+        Logger.info(`Generating a number between ${min} and ${max}`);
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
