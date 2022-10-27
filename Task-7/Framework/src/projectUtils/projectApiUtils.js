@@ -1,9 +1,6 @@
-const { expect } = require('chai');
-
 const { ApiUtils } = require('../framework/utils');
 const { ApiRequests } = require('../test/testData');
 const Timeouts = require('../environment/timeouts');
-const { Logger } = require('../framework');
 
 module.exports = new class ProjectApiUtils{
     async checkEmailList(TOKEN){

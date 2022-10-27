@@ -1,5 +1,3 @@
-const Logger = require("../logger");
-
 module.exports = class GeneratorUtils{
     /**
     * Generate a random string with characters of set lenght

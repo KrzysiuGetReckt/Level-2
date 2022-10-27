@@ -4,11 +4,10 @@ const { ENVIRONMENT} = require('../../environment/envConfig');
 const { EMAIL, TOKEN } = require('../../environment/credensialsEnviroment');
 const env = require(`../../environment/${ENVIRONMENT}Environment`); 
 const { HomePage, NewsLetterPage, ConfirmationPage, PreviewPage, NewsletterUnsubscriptionPage } = require('../../pages');
-const { ApiUtils, GeneratorUtils, DecodeUtils } = require('../../framework/utils');
+const { GeneratorUtils, DecodeUtils } = require('../../framework/utils');
 const { NewsLetterForm, CompleateSubscription } = require('../../forms');
-const { ApiRequests, ApiStatusCodes, TestData} = require('../testData');
+const { ApiStatusCodes, TestData} = require('../testData');
 const { ProjectApiUtils, CherioUtils } = require('../../projectUtils');
-const { Logger } = require('../../framework');
 
 describe(`Testing Google Api with ${env.startUrl}`, async () => {
   beforeEach(async function(){
