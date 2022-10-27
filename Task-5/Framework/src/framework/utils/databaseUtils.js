@@ -5,6 +5,8 @@ module.exports = class DatabaseUtils{
     
     _connection = null; 
 
+    constructor(){
+    }
 
     /**
     * Checks if there is an established connection.
@@ -51,10 +53,15 @@ module.exports = class DatabaseUtils{
     */
 
     async createConnection(dbConfig) {
-        if(await this._isConnectionCreated() === false){
-            this._connection = await mysql.createConnection(dbConfig);
+        try {
+            if(await this._isConnectionCreated() === false){
+                this._connection = await mysql.createConnection(dbConfig);
+            }
+            this.isConnectionEstablished();
+            return this._connection;
+        } catch (err) {
+            throw err;
         }
-        return this._connection;
     }
 
     /**
@@ -63,7 +70,12 @@ module.exports = class DatabaseUtils{
 
     async endConnection() {
         await this._connection.end();
-        this._connection = null;
+        try{
+            this.isConnectionNotEstablished();
+            this._connection = null;
+        }catch(err){
+            throw err;
+        }
     }
 
     /**
@@ -76,11 +88,11 @@ module.exports = class DatabaseUtils{
     async query(queryString){
         try{
             await this.isConnectionEstablished();
+            Logger.info(`Executing query to Database.`);
+            const [rows, fields] = await this._connection.execute(queryString);
+            return [rows, fields];
         }catch(err){
             throw err;
         }
-        Logger.info(`Executing query to Database.`);
-        const [rows, fields] = await this._connection.execute(queryString);
-        return [rows, fields];
     }
 }

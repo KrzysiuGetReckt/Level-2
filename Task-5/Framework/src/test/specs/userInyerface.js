@@ -14,7 +14,8 @@ const TestUtil = require('../../projectUtils/testUtil');
 const { TestSettings } = require('../testData');
 
 const testStartTime = DateUtils.currentDate();
-const db = new DatabaseUtils;
+
+const db = new DatabaseUtils();
 
 describe('User Inyerface', async () => {
   before(async function(){
