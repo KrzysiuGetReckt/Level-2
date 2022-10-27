@@ -1,3 +1,5 @@
+const { Logger } = require('../../framework');
+
 module.exports = class DecodeUtils {
     /**
     * Encodes a variable to a string.
@@ -7,6 +9,7 @@ module.exports = class DecodeUtils {
     * @returns {string} result the encoding
     */
     static encode(encodedMessage, decode, encode){
+        Logger.info('Decoding the message');
         return Buffer.from(encodedMessage, decode).toString(encode);
     }
 }

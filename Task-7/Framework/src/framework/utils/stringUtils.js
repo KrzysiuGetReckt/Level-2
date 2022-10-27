@@ -1,3 +1,5 @@
+const { Logger } = require('../../framework');
+
 module.exports = class StringUtils {
   /**
   * Remove all spaces from string
@@ -5,6 +7,7 @@ module.exports = class StringUtils {
   * @returns {string} string without spaces
   */
   static removeAllSpacesFromString(str) {
+    Logger.info('Removing whitespaces from string')
     return str.replace(/\s/g, '');
   }
   /**
@@ -13,6 +16,7 @@ module.exports = class StringUtils {
   * @returns {number} number
   */
   static convertStringToNumber(str) {
+    Logger.info('Changing an int to string');
     return Number.parseInt(str, 10);
   }
   /**
@@ -23,6 +27,7 @@ module.exports = class StringUtils {
   * @returns {string} string without spaces
   */
   static replaceSymbols(str, oldSymb, newSymb = '') {
+    Logger.info('Replacing all sumbols with regex.')
     const re = new RegExp(oldSymb, 'g');
     return str.replace(re, newSymb);
   }
