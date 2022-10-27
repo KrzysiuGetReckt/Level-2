@@ -2,26 +2,33 @@ const { expect } = require('chai');
 
 const { ApiUtils } = require('../framework/utils');
 const { ApiRequests } = require('../test/testData');
-const { ENVIRONMENT, TOKEN } = require('../environment/envConfig');
-const { ApiStatusCodes } = require('../test/testData');
-const env = require(`../environment/${ENVIRONMENT}Environment`); 
-const Timeouts = require('../environment/timeouts')
+const Timeouts = require('../environment/timeouts');
+const { Logger } = require('../framework');
 
 module.exports = new class ProjectApiUtils{
     async checkEmailList(TOKEN){
-        let response = await ApiUtils.get(ApiRequests.getMailList.url(), ApiRequests.header(TOKEN));
-        expect(response.status).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
-        return response.body.resultSizeEstimate;
+        const response = await ApiUtils.get(ApiRequests.getMailList.url(), ApiRequests.header(TOKEN));
+        return { resultSize: response.body.resultSizeEstimate, statusCode: response.status };
+    }
+
+    async listOfEmails(TOKEN){
+       const response = await ApiUtils.get(ApiRequests.getSpecificMail.url('noreply@euronews.com'), ApiRequests.header(TOKEN));
+       return { emailId: response.body.messages[0].id, statusCode: response.status };
+    }
+
+    async bodyOfEmail(TOKEN, emailId){
+        const response = await ApiUtils.get(ApiRequests.getContentMail.url(emailId), ApiRequests.header(TOKEN));
+        return { bodyData: response.body.payload["parts"][0].body.data , statusCode: response.status };
     }
 
     async waitTillEmail(TOKEN){
-        return await browser.waitUntil(
-            async () => (await this.checkEmailList(TOKEN)) != 0,
+        return browser.waitUntil(
+            async () => ((await this.checkEmailList(TOKEN)).resultSize) != 0,
             {
                 timeout: Timeouts.timeout,
                 timeoutMsg: 'expected email not found after 50s',
                 interval: Timeouts.interval,
             }
-          );
+        );
     }
 }

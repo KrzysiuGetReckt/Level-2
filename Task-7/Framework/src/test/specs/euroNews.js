@@ -8,6 +8,7 @@ const { ApiUtils, GeneratorUtils, DecodeUtils } = require('../../framework/utils
 const { NewsLetterForm, CompleateSubscription } = require('../../forms');
 const { ApiRequests, ApiStatusCodes, TestData} = require('../testData');
 const { ProjectApiUtils, CherioUtils } = require('../../projectUtils');
+const { Logger } = require('../../framework');
 
 describe(`Testing Google Api with ${env.startUrl}`, async () => {
   beforeEach(async function(){
@@ -18,8 +19,8 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
     await HomePage.clickContiniueWithoutAgreeing();
     await HomePage.clickNewsletters();
     await NewsLetterPage.waitForFormIsOpened();
-    let options = await NewsLetterPage.getNewsLetterOptionsAttribute();
-    let pickedIndex = await GeneratorUtils.getRandomNumberExceptGivenOnes(Object.keys(options).length, TestData.excludItems);
+    const options = await NewsLetterPage.getNewsLetterOptionsAttribute();
+    const pickedIndex = GeneratorUtils.getRandomNumberExceptGivenOnes(Object.keys(options).length, TestData.excludItems);
     await NewsLetterPage.clickNewsLetterOption(options[pickedIndex]);
     await NewsLetterForm.waitForFormIsOpened();
     await NewsLetterForm.isFormOpened();
@@ -27,29 +28,26 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
     await NewsLetterForm.submitEmail();
     await CompleateSubscription.waitForFormIsOpened();
     await ProjectApiUtils.waitTillEmail(TOKEN);
-    let response = await ApiUtils.get(ApiRequests.getSpecificMail.url('noreply@euronews.com'), ApiRequests.header(TOKEN)); //Getting the emails
-    expect(response.status).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
-    response = await ApiUtils.get(ApiRequests.getContentMail.url(response.body.messages[0].id), ApiRequests.header(TOKEN)); //Getting the body of the exact email
-    expect(response.status).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
-    const encodedMessage = response.body.payload["parts"][0].body.data;
-    const decodedMessage = await DecodeUtils.encode(encodedMessage, 'base64', 'ascii'); //Decoding the body
-    //Getting the href from the html document that is the decoded E-mail message
-    //And going to that specific url
-    await browser.url(await CherioUtils.getTagAttributeFromString(decodedMessage, 'a', 'href')); 
+    const listOfEmails = await ProjectApiUtils.listOfEmails(TOKEN); //Getting the emails
+    expect(listOfEmails.statusCode).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
+    const emailBodyText = await ProjectApiUtils.bodyOfEmail(TOKEN, listOfEmails.emailId); //Getting the body of the exact email
+    expect(emailBodyText.statusCode).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
+    await browser.url(await CherioUtils.getLinkSubscriptionEmail(await DecodeUtils.encode(emailBodyText.bodyData, TestData.decodeFrom, TestData.encodeTo), TestData.htmlA, TestData.htmlHrefAttribute)); 
     await ConfirmationPage.isFormOpened();
     await ConfirmationPage.clickBackToSite();
     await HomePage.isFormOpened();
     await HomePage.clickNewsletters();
     const hrefAttribute = await NewsLetterPage.getNewsLetterAttribute(options[pickedIndex]);
     await NewsLetterPage.clickNewsLetterPreview(options[pickedIndex]);
-    await PreviewPage.changeToIframe(hrefAttribute);
+    await PreviewPage.changeToIframe(hrefAttribute);  
     await PreviewPage.waitForFormIsOpened();
-    const url = await PreviewPage.getUnsubscribeUrl();
-    await browser.url(url[0]);
+    await browser.url(await PreviewPage.getUnsubscribeUrl());
     await NewsletterUnsubscriptionPage.waitForFormIsOpened();
     await NewsletterUnsubscriptionPage.setEmailText(EMAIL);
     await NewsletterUnsubscriptionPage.clickConfirmUnsubscription();
     await NewsletterUnsubscriptionPage.isUnsubscriptionMessageDisplayed(); //Checking if the text is displayed.
-    expect(await ProjectApiUtils.checkEmailList(TOKEN)).to.equal(1);
+    const emailList = await ProjectApiUtils.checkEmailList(TOKEN);
+    expect(emailList.statusCode).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
+    expect(emailList.resultSize).to.equal(1);
   });
 })

@@ -5,5 +5,5 @@ module.exports = {
   implicit: 0,
   pageLoadTime: 150000,
   timeout: 50000,
-  interval: 1000,
+  interval: 5000,
 };

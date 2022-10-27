@@ -7,6 +7,11 @@ module.exports = async function () {
     await origFunction(url);
   });
 
+  await browser.overwriteCommand('switchToFrame', async (origFunction, id) => {
+    Logger.info(`Switching to Iframe of id ${JSON.stringify(id)}`);
+    await origFunction(id);
+  });
+
   await browser.overwriteCommand('reloadSession', async (origFunction) => {
     Logger.info('Reload browser session');
     await origFunction();
@@ -22,9 +27,13 @@ module.exports = async function () {
     return this.getUrl();
   });
 
+  
+
   await browser.addCommand('swithToLastWindow', async function () {
     Logger.info('Switch to last window');
     const windows = await this.getWindowHandles();
     return this.switchToWindow(windows.pop());
   });
+
+  
 };

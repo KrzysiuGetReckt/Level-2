@@ -14,7 +14,8 @@ module.exports = new class PreviewPage extends BaseForm{
 
     async getUnsubscribeUrl(){
         await this.unsubscribeLink.scrollIntoView();
-        return this.unsubscribeLink.getAttributeFromElements('href'); 
+        const href = await this.unsubscribeLink.getAttributeFromElements('href');
+        return href[0]; 
     }
 
     async changeToIframe(attribute){
