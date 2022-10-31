@@ -31,7 +31,7 @@ describe(`Testing Google Api with ${env.startUrl}`, async () => {
     expect(listOfEmails.statusCode).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
     const emailBodyText = await ProjectApiUtils.bodyOfEmail(TOKEN, listOfEmails.emailId); //Getting the body of the exact email
     expect(emailBodyText.statusCode).to.equal(ApiStatusCodes.ok, 'The response code is not OK');
-    await browser.url(await CherioUtils.getLinkSubscriptionEmail(await DecodeUtils.encode(emailBodyText.bodyData, TestData.decodeFrom, TestData.encodeTo), TestData.htmlA, TestData.htmlHrefAttribute)); 
+    await browser.url(CherioUtils.getLinkSubscriptionEmail(DecodeUtils.encode(emailBodyText.bodyData, TestData.decodeFrom, TestData.encodeTo), TestData.htmlA, TestData.htmlHrefAttribute)); 
     await ConfirmationPage.isFormOpened();
     await ConfirmationPage.clickBackToSite();
     await HomePage.isFormOpened();
